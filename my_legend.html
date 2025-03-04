@@ -1,0 +1,39 @@
+{% macro html(this, kwargs) %}
+<div id='maplegend' class='maplegend'
+     style='position: absolute; z-index:9999; bottom: 20px; right: 20px;
+            border:2px solid grey; background-color:rgba(255, 255, 255, 0.8);
+            border-radius:6px; padding: 10px; font-size:14px;'>
+
+    <div class='legend-title'>Walking time (min)</div>
+    <ul style="list-style:none; margin:0; padding:0;">
+      <li>
+        <span style='display:inline-block; width:12px; height:12px; border-radius:50%;
+                     margin-right:8px; background:#ffffcc;'></span>
+        0 - 2
+      </li>
+      <li>
+        <span style='display:inline-block; width:12px; height:12px; border-radius:50%;
+                     margin-right:8px; background:#a1dab4;'></span>
+        2 - 5
+      </li>
+      <li>
+        <span style='display:inline-block; width:12px; height:12px; border-radius:50%;
+                     margin-right:8px; background:#41b6c4;'></span>
+        5 - 10
+      </li>
+      <li>
+        <span style='display:inline-block; width:12px; height:12px; border-radius:50%;
+                     margin-right:8px; background:#2c7fb8;'></span>
+        10 - 15
+      </li>
+    </ul>
+</div>
+
+<style>
+  .maplegend .legend-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+</style>
+{% endmacro %}
