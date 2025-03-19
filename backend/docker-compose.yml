@@ -32,6 +32,9 @@ services:
     image: osgeo/gdal:ubuntu-small-3.6.3
     container_name: gdal
     entrypoint: ["tail", "-f", "/dev/null"]
+    volumes:
+    - /root/accessibility-project1/data:/root/accessibility-project1/data
+    - /root/accessibility-project1/backend:/root/accessibility-project1/backend
     restart: unless-stopped
 
 volumes:
