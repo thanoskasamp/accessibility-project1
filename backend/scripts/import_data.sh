@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 # Set PostGIS credentials.
-source /root/accessibility-project1/backend/.env
+source /backend/.env
 export POSTGIS_USER=${POSTGRES_USER}
 export POSTGIS_PASSWORD=${POSTGRES_PASSWORD}
 export POSTGIS_DB=${POSTGRES_DB}
 
 # Change directory to where the GeoPackage files are stored.
-cd /root/accessibility-project1/data
+cd /data
 
 # Loop through each .gpkg file in the directory.
 for file in *.gpkg; do

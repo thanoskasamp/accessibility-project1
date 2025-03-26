@@ -4,3 +4,5 @@
 /backend/.env
 
 /data
+
+/backend/certs/

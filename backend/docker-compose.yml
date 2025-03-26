@@ -33,8 +33,21 @@ services:
     container_name: gdal
     entrypoint: ["tail", "-f", "/dev/null"]
     volumes:
-    - /root/accessibility-project1/data:/root/accessibility-project1/data
-    - /root/accessibility-project1/backend:/root/accessibility-project1/backend
+    - /root/accessibility-project1/data:/data 
+    - /root/accessibility-project1/backend:/backend
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /root/accessibility-project1/backend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /root/accessibility-project1/backend/certs:/etc/nginx/certs:ro
+    depends_on:
+      - geoserver
     restart: unless-stopped
 
 volumes:
