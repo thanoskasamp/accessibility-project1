@@ -17,8 +17,6 @@ Enhance the accessibility of public transportation in the neighborhoods of Toump
   - **QGIS**: Produced static maps to display walking routes and accessibility analyses.
 - **Interactive Mapping**:  
   - **Folium**: Created dynamic, interactive maps.
-  - **Bus Stop Data Handling**:  
-    - Integrated Folium’s MarkerCluster plugin to efficiently manage large sets of point features by loading bus stop data directly in HTML.
 
 ### Performance & Data Delivery (Backend Enhancements)
 - **Cloud Server**: Hosts the backend stack.
