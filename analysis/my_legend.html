@@ -1,9 +1,7 @@
-{% macro html(this, kwargs) %}
 <div id='maplegend' class='maplegend'
-     style='position: fixed; z-index:1000000 !important; bottom: 20px; right: 20px;
+     style='z-index:1000000 !important;
             border:2px solid grey; background-color:rgba(255, 255, 255, 0.9);
             border-radius:6px; padding: 10px; font-size:14px;'>
-
     <div class='legend-title'>Walking time (min)</div>
     <ul style="list-style:none; margin:0; padding:0;">
       <li>
@@ -28,7 +26,6 @@
       </li>
     </ul>
 </div>
-
 <style>
   .maplegend .legend-title {
     text-align: center;
@@ -36,4 +33,3 @@
     margin-bottom: 5px;
   }
 </style>
-{% endmacro %}
