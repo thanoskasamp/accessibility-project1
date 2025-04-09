@@ -1,0 +1,24 @@
+FROM python:3.9-slim
+
+# Install system dependencies for GeoDjango
+RUN apt-get update && apt-get install -y \
+    gdal-bin \
+    libgdal-dev \
+    binutils \
+    libproj-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy and install Python dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy your Django project code into the container
+COPY . /app/
+
+# Expose port 8000 for Django
+EXPOSE 8000
+
+# Set default environment command
+CMD ["gunicorn", "webgis_project.wsgi:application", "--bind", "0.0.0.0:8000"]

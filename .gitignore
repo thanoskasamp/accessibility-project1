@@ -1,8 +1,10 @@
 /analysis/docs
 /analysis/cache
+/analysis/__pycache__
 
 /backend/.env
 
 /data
 
 /backend/certs/
+/backend/web.xml

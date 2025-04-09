@@ -23,7 +23,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - geoserver_data:/var/local/geoserver_data
+      - geoserver_data:/opt/geoserver/data_dir
+      - /root/accessibility-project1/backend/web.xml:/usr/local/tomcat/webapps/geoserver/WEB-INF/web.xml
     depends_on:
       - postgis
     restart: unless-stopped
@@ -49,6 +50,18 @@ services:
     depends_on:
       - geoserver
     restart: unless-stopped
+
+  django:
+    build:
+      context: ./django_app
+      dockerfile: dockerfile
+    container_name: django_app
+    volumes:
+      - /root/accessibility-project1/backend/django_app:/app
+    env_file:
+      - /root/accessibility-project1/backend/.env
+    command: gunicorn webgis_project.wsgi:application --bind 0.0.0.0:8000
+
 
 volumes:
   postgis_data:
