@@ -1,46 +1,28 @@
+<!-- webgis_app/templates/map.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Full Viewport Folium Map</title>
+  <title>Folium Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Force the html and body to fill the entire viewport */
+    /* Ensure that the html and body fill the viewport */
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       width: 100%;
+      height: 100%;
     }
-    /* Container that will hold the map */
+    /* If you want to wrap the map, you can define a container */
     #map-container {
-      height: 100%;
       width: 100%;
-    }
-    /* Override any inline styles set by Folium for aspect ratio */
-    /* Adjust selectors if needed by inspecting the generated HTML */
-    #map-container .folium-map,
-    #map-container .folium-map > div {
-      height: 100% !important;
-      padding-bottom: 0 !important;
+      height: 100%;
     }
   </style>
 </head>
 <body>
   <div id="map-container">
-    <!-- Render the Folium map HTML from your view -->
     {{ map|safe }}
   </div>
-
-  <script>
-    // This script waits until the DOM content is loaded and then forces the map's container styles.
-    document.addEventListener("DOMContentLoaded", function() {
-      // Find the first div inside your map container (Folium usually creates one)
-      var mapElement = document.querySelector("#map-container > div");
-      if (mapElement) {
-        mapElement.style.height = "100%";
-        mapElement.style.paddingBottom = "0";
-      }
-    });
-  </script>
 </body>
 </html>

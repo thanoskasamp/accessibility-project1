@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 # webgis_app/views.py
 import os
 from django.shortcuts import render
@@ -12,16 +9,20 @@ from folium import JsCode
 from webgis_app.custom_control import CustomControl
 
 def map_view(request):
-    # 1. Create a Folium map with no default basemap.
+    # 1. Create a Folium Figure with explicit dimensions.
+    fig = folium.Figure(width='100%', height='100%')
+    
+    # 2. Create a Folium map with no default basemap.
     m = folium.Map(
-        location=[40.618, 22.975],    
+        location=[40.618, 22.975],
         zoom_start=14,
-        width='100%',
-        height='100%',
         tiles=None  # We'll add our own basemap below
     )
-
-    # 2. Add Base Layers
+    
+    # Add the map to the figure so that the Figure's dimensions control its size.
+    fig.add_child(m)
+    
+    # 3. Add Base Layers
     folium.TileLayer(
         'CartoDB positron',
         name='CartoDB Positron',
@@ -36,17 +37,17 @@ def map_view(request):
         show=False  # This layer is hidden by default
     ).add_to(m)
 
-    # 3. Load Your Legend HTML
-    base_dir = os.path.dirname(os.path.abspath(__file__))  
+    # 4. Load Your Legend HTML
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     legend_path = os.path.join(base_dir, 'custom_html', 'my_legend.html')
     with open(legend_path, 'r', encoding='utf-8') as f:
         legend_html = f.read()
 
-    # 4. Create & Add Your Custom Legend Control
+    # 5. Create & Add Your Custom Legend Control
     legend_control = CustomControl(legend_html, position='bottomright')
     m.add_child(legend_control)
 
-    # 5. Add WMS Layer
+    # 6. Add WMS Layer
     folium.WmsTileLayer(
         url="https://thanosgis.me/geoserver/wms",  # workspace-level endpoint
         name="Buildings Toumpa (WMS)",
@@ -58,15 +59,15 @@ def map_view(request):
         maxZoom=20,  # Zoom level for WMS visibility
     ).add_to(m)
 
-    # 6. Add Plugins
+    # 7. Add Plugins
     Draw(export=True).add_to(m)
     LocateControl().add_to(m)
 
-    # 7. Layer Control
+    # 8. Layer Control
     folium.LayerControl().add_to(m)
 
-    # 8. Convert Your Folium Map to HTML
-    map_html = m._repr_html_()
+    # 9. Render the Figure (which wraps your map) as HTML
+    map_html = fig.render()
 
-    # 9. Render Your Template & Pass the Map HTML
+    # 10. Render Your Template & Pass the Map HTML
     return render(request, 'map.html', {'map': map_html})
