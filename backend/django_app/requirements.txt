@@ -4,4 +4,4 @@ djangorestframework
 djangorestframework-gis
 gunicorn
 django-environ
-python-dotenv
+folium
