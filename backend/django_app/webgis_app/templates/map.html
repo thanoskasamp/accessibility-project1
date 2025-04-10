@@ -2,221 +2,216 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Modern Accessibility Map</title>
-  
-  <!-- Bootstrap 5 (CDN) -->
-  <link 
-    rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  />
-  <!-- Bootstrap Icons for button icons -->
-  <link 
-    rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-  />
-  
+  <title>Project 1</title>
+  <!-- Essential meta viewport for mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap 5 CSS & Icons (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
   <style>
-    /* Base Reset */
+    /* Base reset & full viewport usage */
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       width: 100%;
+      height: 100%;
       font-family: "Nunito", "Helvetica Neue", Arial, sans-serif;
-      background-color: #f8f9fa;
+      background: #f8f9fa;
     }
 
-    /* Navbar styling */
-    .navbar {
-      height: 56px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    /* Map container: full screen below navbar */
+    /* Map container, occupying the entire screen */
     .map-container {
       position: relative;
       width: 100%;
-      height: calc(100vh - 56px);
-      background: #eeeeee;
-      overflow: hidden;
+      height: 100%;
+      background: #eaeaea;
     }
-
-    /* Ensure the Folium map fills its container */
     #map {
       width: 100%;
       height: 100%;
     }
 
-    /* Floating container for our three buttons */
-    .fab-container {
-      display: flex;
-      gap: 10px;
+    /* Side overlay for menu */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 320px;             /* Adjust as needed */
+      height: 100vh;
+      background: #fcfcfc;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.15);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 1rem;
+      box-sizing: border-box;
+      font-size: 1.2rem;        /* Larger base font for readability */
+    }
+    .menu-overlay.open {
+      transform: translateX(0);
+    }
+    
+    /* Brand area: displays only large text without an image */
+    .brand-area {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .brand-area h3 {
+      margin: 0;
+      font-size: 2rem;       /* Even larger brand text */
+      font-weight: 700;
+    }
+    
+    /* Close button for the overlay */
+    .overlay-close {
       position: absolute;
-      z-index: 1000;
+      top: 1rem;
+      right: 1rem;
+      border: none;
+      background: transparent;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #333;
+    }
+    
+    /* Card container for the list items (optional styling) */
+    .menu-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
     }
 
-    /* Desktop view: center the buttons at the bottom */
-    @media (min-width: 768px) {
-      .fab-container {
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
+    /* List group items for the menu (bigger text & icons) */
+    .menu-list .list-group-item {
+      cursor: pointer;
+      font-size: 1.5rem;  /* Bigger text */
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;   /* Extra padding */
     }
-    
-    /* Mobile view: align buttons in the bottom left */
-    @media (max-width: 767.98px) {
-      .fab-container {
-        bottom: 20px;
-        left: 20px;
-        transform: none;
-      }
+    .menu-list .list-group-item i {
+      font-size: 2rem;   /* Bigger icons */
     }
-    
-    /* Button styling (similar to Leaflet control buttons) */
-    .fab-item {
-      background-color: #fff;
-      color: #333;
+    .menu-list .list-group-item:hover {
+      background: #f0f0f0;
+    }
+
+    /* Floating controls (bottom-left) */
+    .floating-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .floating-button {
+      width: 56px;
+      height: 56px;
+      background: #fff;
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      color: #333;
+      font-size: 1.6rem;
       cursor: pointer;
       transition: background-color 0.2s;
       position: relative;
     }
-    .fab-item:hover {
+    .floating-button:hover {
       background-color: #f2f2f2;
     }
-    
-    /* Tooltip for each button on hover */
-    .fab-item[data-label]:hover::after {
+    .floating-button[data-label]:hover::after {
       content: attr(data-label);
       position: absolute;
-      right: 60px; /* adjust to position the tooltip */
+      left: 70px;
+      top: 50%;
+      transform: translateY(-50%);
       background: #fff;
       color: #333;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 4px;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       white-space: nowrap;
     }
   </style>
 </head>
 <body>
-  <!-- Minimal Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <span class="navbar-brand fw-semibold ms-2">
-        Modern Accessibility Map
-      </span>
-      <div class="d-flex">
-        <!-- Info button triggers an info modal -->
-        <button 
-          class="btn btn-outline-light me-2" 
-          data-bs-toggle="modal" 
-          data-bs-target="#infoModal"
-        >
-          Πληροφορίες
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Map Container -->
   <div class="map-container">
+    <!-- Folium Map Injection -->
     <div id="map">
       {{ map|safe }}
     </div>
-
-    <!-- Floating container for three control buttons -->
-    <div class="fab-container">
-      <!-- Zoom In -->
-      <div 
-        class="fab-item" 
-        data-label="Zoom In" 
-        onclick="zoomInMap()"
-      >
+    
+    <!-- Floating Controls -->
+    <div class="floating-controls">
+      <div class="floating-button" data-label="Zoom In" onclick="zoomInMap()">
         <i class="bi bi-zoom-in"></i>
       </div>
-      <!-- Zoom Out -->
-      <div 
-        class="fab-item" 
-        data-label="Zoom Out" 
-        onclick="zoomOutMap()"
-      >
+      <div class="floating-button" data-label="Zoom Out" onclick="zoomOutMap()">
         <i class="bi bi-zoom-out"></i>
       </div>
-      <!-- Full Extent -->
-      <div 
-        class="fab-item" 
-        data-label="Full Extent" 
-        onclick="fullExtentMap()"
-      >
-        <i class="bi bi-arrows-fullscreen"></i>
+      <div class="floating-button" data-label="Menu" onclick="toggleMenuOverlay()">
+        <i class="bi bi-list"></i>
       </div>
     </div>
   </div>
 
-  <!-- Info Modal -->
-  <div 
-    class="modal fade" 
-    id="infoModal" 
-    tabindex="-1" 
-    aria-labelledby="infoModalLabel" 
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="infoModalLabel">Πληροφορίες</h5>
-          <button 
-            type="button" 
-            class="btn-close" 
-            data-bs-dismiss="modal" 
-            aria-label="Close"
-          ></button>
+  <!-- Side Menu Overlay -->
+  <div class="menu-overlay" id="menuOverlay">
+    <!-- Close button -->
+    <button class="overlay-close" onclick="toggleMenuOverlay()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+    
+    <!-- Brand/Title area (text only) -->
+    <div class="brand-area">
+      <h3>Accessibility Analysis</h3>
+    </div>
+    
+    <!-- Menu items (list group) -->
+    <div class="menu-card">
+      <div class="menu-list list-group list-group-flush">
+        <div class="list-group-item" onclick="alert('Add Data clicked!')">
+          <i class="bi bi-plus-square"></i> Add Data
         </div>
-        <div class="modal-body">
-          <h5>Objective</h5>
-          <p>
-            This project aims to enhance the accessibility of public transportation 
-            in Toumpa and Ano Poli by using geospatial data analysis to understand walkability to bus stops.
-          </p>
-          <h5>Methodology</h5>
-          <ul>
-            <li><strong>Data Collection:</strong> OSMnx from OpenStreetMap for buildings, streets, bus stops.</li>
-            <li><strong>Data Processing:</strong> Clean and align data for analysis with Python scripts.</li>
-            <li><strong>Network Analysis:</strong> Compute shortest walking routes linking buildings to bus stops.</li>
-            <li><strong>QGIS Application:</strong> Generate static maps that show walking routes and accessibility.</li>
-          </ul>
+        <div class="list-group-item" onclick="alert('Layers clicked!')">
+          <i class="bi bi-layers"></i> Layers
         </div>
-        <div class="modal-footer">
-          <button 
-            type="button" 
-            class="btn btn-secondary" 
-            data-bs-dismiss="modal"
-          >
-            Close
-          </button>
+        <div class="list-group-item" onclick="alert('Analysis clicked!')">
+          <i class="bi bi-bar-chart-line"></i> Analysis
+        </div>
+        <div class="list-group-item" onclick="alert('Settings clicked!')">
+          <i class="bi bi-gear"></i> Settings
+        </div>
+        <hr class="my-1">
+        <div class="list-group-item" onclick="alert('More Info clicked!')">
+          <i class="bi bi-info-circle"></i> More Info
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap JS Bundle (includes Popper) -->
-  <script 
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-  </script>
+  <!-- Bootstrap JS Bundle (optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    // Example functions for map actions.
-    // (Ensure your map object from Folium is globally accessible as "map" if available.)
+    // Toggle the side menu overlay
+    function toggleMenuOverlay() {
+      const overlay = document.getElementById('menuOverlay');
+      overlay.classList.toggle('open');
+    }
+    
+    // Example map control functions (if your Folium map exposes a global "map")
     function zoomInMap() {
       if (typeof map !== 'undefined' && map.zoomIn) {
         map.zoomIn();
@@ -225,11 +220,6 @@
     function zoomOutMap() {
       if (typeof map !== 'undefined' && map.zoomOut) {
         map.zoomOut();
-      }
-    }
-    function fullExtentMap() {
-      if (typeof map !== 'undefined' && map.setView) {
-        map.setView([40.6401, 22.9444], 13);
       }
     }
   </script>
