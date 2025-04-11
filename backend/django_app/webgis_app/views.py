@@ -37,8 +37,6 @@ def map_view(request):
         show=False  # This layer is hidden by default
     ).add_to(m)
 
-
-
     # 6. Add WMS Layer
     folium.WmsTileLayer(
         url="https://thanosgis.me/geoserver/wms",  # workspace-level endpoint
