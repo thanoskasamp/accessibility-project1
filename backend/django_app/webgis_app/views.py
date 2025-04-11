@@ -37,15 +37,7 @@ def map_view(request):
         show=False  # This layer is hidden by default
     ).add_to(m)
 
-    # 4. Load Your Legend HTML
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    legend_path = os.path.join(base_dir, 'custom_html', 'my_legend.html')
-    with open(legend_path, 'r', encoding='utf-8') as f:
-        legend_html = f.read()
 
-    # 5. Create & Add Your Custom Legend Control
-    legend_control = CustomControl(legend_html, position='bottomright')
-    m.add_child(legend_control)
 
     # 6. Add WMS Layer
     folium.WmsTileLayer(

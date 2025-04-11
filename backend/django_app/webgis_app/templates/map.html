@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Project 1</title>
-  <!-- Essential meta viewport for mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Bootstrap 5 CSS & Icons (CDN) -->
@@ -38,7 +37,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 320px;             /* Adjust as needed */
+      width: 320px;  
       height: 100vh;
       background: #fcfcfc;
       box-shadow: 2px 0 6px rgba(0,0,0,0.15);
@@ -48,24 +47,24 @@
       overflow-y: auto;
       padding: 1rem;
       box-sizing: border-box;
-      font-size: 1.2rem;        /* Larger base font for readability */
+      font-size: 1.2rem;        
     }
     .menu-overlay.open {
       transform: translateX(0);
     }
-    
-    /* Brand area: displays only large text without an image */
+
+    /* Brand area: text only */
     .brand-area {
       margin-bottom: 1.5rem;
       text-align: center;
     }
     .brand-area h3 {
       margin: 0;
-      font-size: 2rem;       /* Even larger brand text */
+      font-size: 2rem;       
       font-weight: 700;
     }
-    
-    /* Close button for the overlay */
+
+    /* Close button for overlay */
     .overlay-close {
       position: absolute;
       top: 1rem;
@@ -76,8 +75,8 @@
       cursor: pointer;
       color: #333;
     }
-    
-    /* Card container for the list items (optional styling) */
+
+    /* Card container for the list items */
     .menu-card {
       background: #fff;
       border-radius: 8px;
@@ -88,27 +87,28 @@
     /* List group items for the menu (bigger text & icons) */
     .menu-list .list-group-item {
       cursor: pointer;
-      font-size: 1.5rem;  /* Bigger text */
+      font-size: 1.5rem;
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1.5rem;   /* Extra padding */
+      padding: 1.5rem;
     }
     .menu-list .list-group-item i {
-      font-size: 2rem;   /* Bigger icons */
+      font-size: 2rem;
     }
     .menu-list .list-group-item:hover {
       background: #f0f0f0;
     }
 
-    /* Floating controls (bottom-left) */
+    /* Floating controls (bottom-center) */
     .floating-controls {
       position: absolute;
       bottom: 20px;
-      left: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 3000;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
     }
     .floating-button {
@@ -125,23 +125,36 @@
       cursor: pointer;
       transition: background-color 0.2s;
       position: relative;
+      -webkit-tap-highlight-color: transparent; /* remove mobile highlight */
     }
     .floating-button:hover {
       background-color: #f2f2f2;
     }
-    .floating-button[data-label]:hover::after {
-      content: attr(data-label);
+    .floating-button:focus,
+    .floating-button:active,
+    .floating-button:focus-visible {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Legend styling (bottom-center, hidden by default) */
+    #maplegend {
+      z-index: 1000000 !important;
+      border: 2px solid grey;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 14px;
       position: absolute;
-      left: 70px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #fff;
-      color: #333;
-      padding: 6px 10px;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      white-space: nowrap;
+      bottom: 80px; 
+      left: 50%;
+      transform: translateX(-50%);
+      display: none; 
+    }
+    .maplegend .legend-title {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 5px;
     }
   </style>
 </head>
@@ -151,17 +164,43 @@
     <div id="map">
       {{ map|safe }}
     </div>
-    
-    <!-- Floating Controls -->
+
+    <!-- Legend (hidden by default) -->
+    <div id="maplegend" class="maplegend">
+      <div class="legend-title">Walking time (min)</div>
+      <ul style="list-style:none; margin:0; padding:0;">
+        <li>
+          <span style="display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; background:#fde725;"></span>
+          0 - 2
+        </li>
+        <li>
+          <span style="display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; background:#35b779;"></span>
+          2 - 5
+        </li>
+        <li>
+          <span style="display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; background:#31688e;"></span>
+          5 - 10
+        </li>
+        <li>
+          <span style="display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; background:#440154;"></span>
+          10 - 15
+        </li>
+      </ul>
+    </div>
+
+    <!-- Floating Buttons (bottom-center) -->
     <div class="floating-controls">
-      <div class="floating-button" data-label="Zoom In" onclick="zoomInMap()">
-        <i class="bi bi-zoom-in"></i>
+      <!-- (1) Toggle Legend -->
+      <div class="floating-button" onclick="toggleLegend(event)">
+        <i class="bi bi-info-circle"></i>
       </div>
-      <div class="floating-button" data-label="Zoom Out" onclick="zoomOutMap()">
-        <i class="bi bi-zoom-out"></i>
-      </div>
-      <div class="floating-button" data-label="Menu" onclick="toggleMenuOverlay()">
+      <!-- (2) Toggle Menu -->
+      <div class="floating-button" onclick="toggleMenuOverlay()">
         <i class="bi bi-list"></i>
+      </div>
+      <!-- (3) Toggle Draw Tools (pencil) -->
+      <div class="floating-button" onclick="toggleDrawTools(event)">
+        <i class="bi bi-pencil-square"></i>
       </div>
     </div>
   </div>
@@ -172,13 +211,11 @@
     <button class="overlay-close" onclick="toggleMenuOverlay()">
       <i class="bi bi-x-lg"></i>
     </button>
-    
-    <!-- Brand/Title area (text only) -->
+    <!-- Brand area -->
     <div class="brand-area">
       <h3>Accessibility Analysis</h3>
     </div>
-    
-    <!-- Menu items (list group) -->
+    <!-- Menu items -->
     <div class="menu-card">
       <div class="menu-list list-group list-group-flush">
         <div class="list-group-item" onclick="alert('Add Data clicked!')">
@@ -205,22 +242,43 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
-    // Toggle the side menu overlay
+    // Toggle side menu overlay
     function toggleMenuOverlay() {
       const overlay = document.getElementById('menuOverlay');
       overlay.classList.toggle('open');
     }
-    
-    // Example map control functions (if your Folium map exposes a global "map")
-    function zoomInMap() {
-      if (typeof map !== 'undefined' && map.zoomIn) {
-        map.zoomIn();
+
+    // Toggle Legend
+    function toggleLegend(event) {
+      // remove focus from the button
+      event.currentTarget.blur();
+      const legend = document.getElementById('maplegend');
+      if (legend.style.display === 'none' || legend.style.display === '') {
+        legend.style.display = 'block';
+      } else {
+        legend.style.display = 'none';
       }
     }
-    function zoomOutMap() {
-      if (typeof map !== 'undefined' && map.zoomOut) {
-        map.zoomOut();
+
+    // Toggle the Leaflet.Draw toolbar with computed style
+    function toggleDrawTools(event) {
+      event.currentTarget.blur(); // remove focus
+      const drawToolbars = document.querySelectorAll('.leaflet-draw-toolbar');
+      
+      if (drawToolbars.length === 0) {
+        alert('No Leaflet Draw toolbar found. Make sure Folium Draw plugin is enabled.');
+        return;
       }
+      
+      drawToolbars.forEach(toolbar => {
+        const currentDisplay = window.getComputedStyle(toolbar).display;
+        
+        if (currentDisplay === 'none') {
+          toolbar.style.display = 'block';
+        } else {
+          toolbar.style.display = 'none';
+        }
+      });
     }
   </script>
 </body>
