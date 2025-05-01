@@ -16,12 +16,12 @@ for file in *.gpkg; do
     echo "Processing $file, targeting schema '$schema'..."
 
     # Create the schema if it doesn't exist.
-    psql "host=postgis_db port=5432 dbname=$POSTGIS_DB user=$POSTGIS_USER password=$POSTGIS_PASSWORD" \
+    psql "host=postgis port=5432 dbname=$POSTGIS_DB user=$POSTGIS_USER password=$POSTGIS_PASSWORD" \
          -c "CREATE SCHEMA IF NOT EXISTS $schema;"
 
     # Import all layers from the GeoPackage into the specified PostGIS schema.
     ogr2ogr -f "PostgreSQL" \
-      PG:"host=postgis_db port=5432 dbname=$POSTGIS_DB user=$POSTGIS_USER password=$POSTGIS_PASSWORD" \
+      PG:"host=postgis port=5432 dbname=$POSTGIS_DB user=$POSTGIS_USER password=$POSTGIS_PASSWORD" \
       -lco SCHEMA=$schema \
       "$file"
 done

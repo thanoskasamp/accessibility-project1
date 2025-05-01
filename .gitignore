@@ -8,3 +8,15 @@
 
 /backend/certs/
 /backend/web.xml
+
+*.pyc
+*.pyo
+__pycache__/
+
+.ipynb_checkpoints/
+
+.vscode/
+.vscode-server/
+
+.cache/
+*.log

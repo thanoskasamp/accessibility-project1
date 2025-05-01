@@ -1,11 +1,16 @@
 #!/bin/bash
-# Stop NGINX so Certbot can bind to port 80
-docker-compose stop nginx
 
-# Run Certbot in standalone mode to renew certificates
-docker run -it --rm -p 80:80 \
-  -v /root/accessibility-project1/backend/certs:/etc/letsencrypt \
-  certbot/certbot renew --quiet
+cd "$(dirname "$0")"
 
-# Restart NGINX
-docker-compose up -d nginx
+echo "Stopping NGINX to free up port 80..."
+docker compose stop nginx
+
+echo "Renewing SSL certificates using Certbot..."
+docker run --rm -p 80:80 \
+  -v "$(pwd)/certs:/etc/letsencrypt" \
+  certbot/certbot renew --standalone --preferred-challenges http --quiet
+
+echo "Restarting NGINX..."
+docker compose up -d nginx
+
+echo "SSL renewal process completed."
