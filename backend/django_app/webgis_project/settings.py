@@ -30,7 +30,6 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 't')
 
 
 # SECURITY WARNING: define the correct hosts in production!
-# Comma-separated list in your env (e.g., ALLOWED_HOSTS=project1.thanasis.me,www.example.com)
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',') # for the local host the django has just a default value to work with
 
 
