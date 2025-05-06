@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'webgis_app',  # Add your app here
+    'webgis_app',  # Add app
 ]
 
 MIDDLEWARE = [
