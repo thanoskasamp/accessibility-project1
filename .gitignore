@@ -3,6 +3,8 @@
 /analysis/__pycache__
 
 /backend/.env
+/backend/docker-compose.override.yml
+
 
 /data
 

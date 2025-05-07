@@ -76,7 +76,7 @@ services:
     volumes:
       - /root/accessibility-project1/backend/django_app:/app
     env_file:
-      - /root/accessibility-project1/backend/.env
+      - .env
     command: gunicorn webgis_project.wsgi:application --bind 0.0.0.0:8000
     networks:
       - internal
