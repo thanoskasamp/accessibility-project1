@@ -5,9 +5,6 @@ import folium
 from folium.plugins import MarkerCluster, Realtime, Draw, LocateControl
 from folium import JsCode
 
-# Import your custom control if it's in the same app folder
-from webgis_app.custom_control import CustomControl
-
 def map_view(request):
     # 1. Create a Folium Figure with explicit dimensions.
     fig = folium.Figure(width='100%', height='100%')
