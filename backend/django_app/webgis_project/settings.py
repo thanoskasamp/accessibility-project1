@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'webgis_app',  # Add app
+    'django.contrib.gis', # GeoDjango
+    'analysis_app',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +83,12 @@ WSGI_APPLICATION = 'webgis_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Postgis
+        'NAME': os.environ.get('POSTGRES_DB'),             
+        'USER': os.environ.get('POSTGRES_USER'),            
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),    
+        'HOST': 'postgis',   # Docker Compose service name 
+        'PORT': '5432',      
     }
 }
 
